@@ -1,0 +1,20 @@
+// schema.prisma snippet
+model User {
+  id            String    @id @default(cuid())
+  discordId     String    @unique
+  email         String?
+  stripeCustomerId String?
+  plan          PlanType  @default(FREE)
+  bots          Bot[]
+}
+
+model Bot {
+  id          String   @id @default(cuid())
+  name        String
+  token       String   // Encriptado em produção
+  guildId     String   @unique
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  settings    Json     // Configurações customizáveis do bot
+  isActive    Boolean  @default(true)
+}
